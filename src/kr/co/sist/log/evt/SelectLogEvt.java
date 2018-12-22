@@ -1,28 +1,19 @@
 package kr.co.sist.log.evt;
 
 import java.awt.FileDialog;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import kr.co.sist.log.view.Result;
 import kr.co.sist.log.view.SelectLog;
@@ -62,12 +53,13 @@ public class SelectLogEvt implements ActionListener {
 			try {
 				readLog();
 
-				// readLog로 읽어들인 log의 내용을 가공, instance변수에 저장				calMostFrequentKey();
+				// readLog로 읽어들인 log의 내용을 가공, instance변수에 저장
+				calMostFrequentKey();
 				calBrowserShare();
 				calCode403Share();
-
+			
 				// 결과창
-				new Result(this);
+				new Result(this, sl);
 				System.out.println("결과창 생성자 호출");
 
 			} catch (FileNotFoundException fnfe) {
@@ -116,7 +108,6 @@ public class SelectLogEvt implements ActionListener {
 	public void mkLogReport() throws IOException {
 
 		// report, FileDialog SAVE, 출력하는 method
-		
 	}
 
 	public void calMostFrequentKey() {
@@ -125,21 +116,19 @@ public class SelectLogEvt implements ActionListener {
 
 /////////////////////12.22 선의 코드 추가 (브라우저의 비율구해서 반환) 시작//////////////////////////////
 	public void calMostFrequentHour() {
-
+		// 가장 빈도수 높은 시간(mostFrequentHour) 구하는 method 
 	}
 	
+/////////////////////12.22 선의 코드 추가 (브라우저의 비율구해서 반환) 시작//////////////////////////////
 	public void calBrowserShare() {
 		ArrayList<String> al = new ArrayList<String>();
 		Set<String> set = mapBrowser.keySet();
 		Iterator<String> ita = set.iterator();
 		Iterator<String> ita2 = set.iterator();
 
-		System.out.println("모든넘버: " + requestNum);
-		System.out.println(mapBrowser);
 		for (int i = 0; i < browser.length; i++) {
 			mapBrowserShare.put(ita2.next(), String.format("%4.2f", ((mapBrowser.get(ita.next()) / (double) requestNum) * 100)));
 		}
-		System.out.println(mapBrowserShare);
 	}
 /////////////////////12.22 선의 코드 추가 (브라우저의 비율구해서 반환) 끝//////////////////////////////
 
@@ -168,7 +157,7 @@ public class SelectLogEvt implements ActionListener {
 
 				requestNum++;
 				// 선택된 파일의 내용을 한 줄씩 읽어들임
-                // 읽어들이는 내용을 처리하는건 따로 method 만들어서 처리할 것
+				// 읽어들이는 내용을 처리하는건 따로 method 만들어서 처리할 것
 				if (start == 0 && end == 0) {
 					countKey(temp);
 					countBrowser(temp);
@@ -190,9 +179,7 @@ public class SelectLogEvt implements ActionListener {
 	}
 
 	public void countKey(String temp) {
-
 		// 1. 최다 사용 Key의 이름과 횟수를 구하는 method
-
 	}
 
 //////////////////////12.22 선의 추가 코드(브라우저,카운터 mapBrowser에 넣기) 시작 ////////////////////////////
@@ -216,15 +203,13 @@ public class SelectLogEvt implements ActionListener {
 /////////////////////12.22 선의 추가 코드(브라우저,카운터 mapBrowser에 넣기) 끝////////////////////////////
 
 	public void countHttpStatusCode(String temp) {
-		 // 3. 서비스를 성공적으로 수행한 횟수, 실패(404) 횟수
-        // 6. 비정상적인 요청(403)이 발생한 횟수 구하는 method, 비율 구하기 method는 calBrowserShare()로 구현
+		// 3. 서비스를 성공적으로 수행한 횟수, 실패(404) 횟수
+		// 6. 비정상적인 요청(403)이 발생한 횟수 구하는 method, 비율 구하기 method는 calBrowserShare()로 구현
 	}
 
 	public void countRequestHour(String temp) {
 		// 4. 요청 시간별 횟수를 구하는 method.
-
 		Map<String, Integer>map=new HashMap<String,Integer>();
-		
 	}
 
 	public SelectLog getSl() {

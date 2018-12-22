@@ -139,7 +139,6 @@ public class SelectLogEvt implements ActionListener {
 		for (int i = 0; i < browser.length; i++) {
 			mapBrowserShare.put(ita2.next(), String.format("%4.2f", ((mapBrowser.get(ita.next()) / (double) requestNum) * 100)));
 		}
-		System.out.println(al);
 		System.out.println(mapBrowserShare);
 	}
 /////////////////////12.22 선의 코드 추가 (브라우저의 비율구해서 반환) 끝//////////////////////////////

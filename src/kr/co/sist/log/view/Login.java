@@ -1,5 +1,7 @@
 package kr.co.sist.log.view;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -8,7 +10,7 @@ import javax.swing.JTextField;
 import kr.co.sist.log.evt.LoginEvt;
 
 /////////////// 12-22-2018 로그인  JFrame구현(헤원) //////////////////////
-public class Login extends JFrame {
+public class Login extends JFrame{
 	
 	private JTextField jtId;
 	private JTextField jtPw;

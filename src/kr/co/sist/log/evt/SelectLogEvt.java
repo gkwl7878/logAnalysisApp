@@ -114,14 +114,12 @@ public class SelectLogEvt implements ActionListener {
 		// 가장 빈도수 높은 key(mostFrequentKey) 구하는 method
 	}
 
-/////////////////////12.22 선의 코드 추가 (브라우저의 비율구해서 반환) 시작//////////////////////////////
 	public void calMostFrequentHour() {
 		// 가장 빈도수 높은 시간(mostFrequentHour) 구하는 method 
 	}
 	
-/////////////////////12.22 선의 코드 추가 (브라우저의 비율구해서 반환) 시작//////////////////////////////
+/////////////////////12.22 선의 코드 추가 (2.브라우저의 비율구해서 반환) 시작//////////////////////////////
 	public void calBrowserShare() {
-		ArrayList<String> al = new ArrayList<String>();
 		Set<String> set = mapBrowser.keySet();
 		Iterator<String> ita = set.iterator();
 		Iterator<String> ita2 = set.iterator();
@@ -130,10 +128,12 @@ public class SelectLogEvt implements ActionListener {
 			mapBrowserShare.put(ita2.next(), String.format("%4.2f", ((mapBrowser.get(ita.next()) / (double) requestNum) * 100)));
 		}
 	}
-/////////////////////12.22 선의 코드 추가 (브라우저의 비율구해서 반환) 끝//////////////////////////////
+/////////////////////12.22 선의 코드 추가 (2.브라우저의 비율구해서 반환) 끝//////////////////////////////
 
 	public void calCode403Share() {
 		code403Share = String.format("%3.2f", (code403 / (double) requestNum) * 100);
+//		System.out.println(" code200의 횟수: "+code200+" code404의 횟수 : "+code404+ 
+//				" code403의 횟수: " + code403+ " requestnum: "+requestNum+" code403의 비율은: "+code403Share);
 	}
 
 	public void selectLog() {
@@ -177,19 +177,28 @@ public class SelectLogEvt implements ActionListener {
 				br.close();
 		}
 	}
-
+	
+//////////////////////12.23 선의 추가 코드(key count 구하기) 시작 ////////////////////////////
+	private String[] key = {"mongodb","res","ora","javascript", "java","hadoop","jsp","d8","jk9k","front" };
+	private int[] keyCnt = new int[key.length];
 	public void countKey(String temp) {
-		// 1. 최다 사용 Key의 이름과 횟수를 구하는 method
+		for(int i=0; i<key.length;i++) {
+			if(temp.contains(key[i])) {
+				mapKey.put(key[i], keyCnt[i]++);				
+			}
+		}
+//		System.out.println(mapKey);
 	}
+//////////////////////12.23 선의 추가 코드(key count 구하기) 끝 ////////////////////////////
+	
 
-//////////////////////12.22 선의 추가 코드(브라우저,카운터 mapBrowser에 넣기) 시작 ////////////////////////////
+//////////////////////12.22 선의 추가 코드(2. 브라우저,카운터 mapBrowser에 넣기) 시작 ////////////////////////////
 	private String[] browser = { "opera", "ie", "firefox", "Chrome", "Safari" };
 	private int[] browserCnt = new int[browser.length];
 
 	public void countBrowser(String temp) {
 		// 2. 브라우저별 접속 횟수 구하는 method, 비율 구하기(아직)
 //		System.out.println(temp);
-		int count = 0;
 //		System.out.println("temp :"+temp  );
 		for (int i = 0; i < browser.length; i++) {
 			if (temp.contains(browser[i])) {
@@ -200,17 +209,42 @@ public class SelectLogEvt implements ActionListener {
 		} // end for
 //		System.out.println("requestNum = " +requestNum+", "+mapBrowser);
 	}// countBrowser
-/////////////////////12.22 선의 추가 코드(브라우저,카운터 mapBrowser에 넣기) 끝////////////////////////////
+/////////////////////12.22 선의 추가 코드(2. 브라우저,카운터 mapBrowser에 넣기) 끝////////////////////////////
 
+/////////////////////12.23 선의 추가 코드(3.성공횟수, 실패횟수 저장//5.비정상요청의 횟수 저장) 시작////////////////////////////
 	public void countHttpStatusCode(String temp) {
 		// 3. 서비스를 성공적으로 수행한 횟수, 실패(404) 횟수
+		int serviceNum = Integer.parseInt(temp.substring(temp.indexOf("[")+1, temp.indexOf("]")));
+		if((serviceNum==200)){
+			code200++;
+//			System.out.println("성공횟수: "+code200);
+		}else if(serviceNum==404) {
+			code404++;
+//			System.out.println("실패횟수: "+code404);			
 		// 6. 비정상적인 요청(403)이 발생한 횟수 구하는 method, 비율 구하기 method는 calBrowserShare()로 구현
+		}else if(serviceNum==403) {
+			code403++;		
+		}
 	}
-
+/////////////////////12.23 선의 추가 코드(3.성공횟수, 실패횟수 저장//5.비정상요청의 횟수 저장) 끝////////////////////////////
+	
+/////////////////////12.23 선의 추가 코드(4.시간횟수) 시작////////////////////////////
+	private String[] arrayHour = {"09","10","11","12"};
+	private int[] hourCnt = new int[arrayHour.length];
 	public void countRequestHour(String temp) {
 		// 4. 요청 시간별 횟수를 구하는 method.
-		Map<String, Integer>map=new HashMap<String,Integer>();
+		String time = temp.substring(temp.lastIndexOf("[")+1, temp.lastIndexOf("]"));
+		String hour = time.substring(time.indexOf(":")-2,time.indexOf(":"));
+		
+		for(int i =0; i<arrayHour.length;i++) {
+			if(hour.equals(arrayHour[i])) {
+				hourCnt[i]++;
+				mapHour.put(hour, hourCnt[i]);
+			}
+		}
+//		System.out.println("mph: "+mapHour+"/ 전체수: "+requestNum);
 	}
+/////////////////////12.23 선의 추가 코드(4.시간횟수) 끝////////////////////////////
 
 	public SelectLog getSl() {
 		return sl;
